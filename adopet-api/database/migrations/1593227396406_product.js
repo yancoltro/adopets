@@ -7,7 +7,7 @@ class ProductsSchema extends Schema {
   up () {
     this.create('products', (table) => {
       table.uuid('uuid').primary();
-      table.string('name', 255).notNullable()
+      table.string('name', 254).notNullable()
       table.string('description', 254).notNullable()
       table.string('category', 254).defaultTo('Uninformed')
       table.float('price').unsigned().defaultTo(0.0)

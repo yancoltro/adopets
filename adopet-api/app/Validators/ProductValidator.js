@@ -4,8 +4,8 @@ class ProductValidator {
 
   get rules() {
     return {
-      name: 'required|min:3',
-      description: 'required|min:10',
+      name: 'required|min:3|max:254',
+      description: 'required|min:10|max:254',
       price: 'number|above:-1',
       stock: 'integer|above:-1'
     }
@@ -15,9 +15,11 @@ class ProductValidator {
     return {
       'name.required': 'You must provide the name of the product',
       'name.min': 'Very short name',
+      'name.max': 'Very long name',
 
       'description.required': 'You must provide the description of the product',
       'description.min': 'Very short description',
+      'description.max': 'Very long description',
 
       'price.number':'Enter a valid price in float format: [0.0]',
       'price.above':'Enter a valid price not negative',
