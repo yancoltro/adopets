@@ -20,13 +20,18 @@ class UserController {
         const token = await auth.attempt(email, password)
         return token
     }   
-
+    /**
+     * This method provide functionality for logout user
+     * due to scope of this project, use api method for login, because this methos allow login and logout
+     */
     async logout({auth}){
         const apiToken = auth.getAuthHeader()
 
         await auth
           .authenticator('api')
           .revokeTokens([apiToken])
+        
+        return {"":""}
     }
 }
 
