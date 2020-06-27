@@ -1,6 +1,7 @@
 'use strict'
 
-const uuidv4 = require("uuid/v4");
+const { v4: uuidv4 } = require('uuid');
+const Hash = use('Hash')
 
 const UserHook = exports = module.exports = {}
 
@@ -16,5 +17,5 @@ UserHook.hashPassword = async (user) => {
 }
 
 UserHook.uuid = async (user) => {
-    user.uuid = this.uuidv4();
+    user.uuid = uuidv4();
 }
