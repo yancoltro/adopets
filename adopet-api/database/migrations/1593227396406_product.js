@@ -9,9 +9,9 @@ class ProductsSchema extends Schema {
       table.uuid('uuid').primary();
       table.string('name', 255).notNullable()
       table.string('description', 254).notNullable()
-      table.string('category', 254).notNullable().defaultTo('UNINFORMED')
-      table.float('price').notNullable().defaultTo(0.0)
-      table.integer('stock').notNullable().default(0)
+      table.string('category', 254).defaultTo('Uninformed')
+      table.float('price').unsigned().defaultTo(0.0)
+      table.integer('stock').unsigned().default(0)
       table.timestamps()
     })
   }
