@@ -18,6 +18,7 @@ class ProductController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
+    return "Hello World"
   }
 
   /**

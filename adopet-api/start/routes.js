@@ -22,4 +22,6 @@ Route.get('/', () => {
 
 Route.post('/register', 'UserController.register')
 Route.post('/login', 'UserController.login')
-Route.post('/logout', 'UserController.logout')
+Route.post('/logout', 'UserController.logout').middleware(['auth'])
+
+Route.get('/products', 'ProductController.index').middleware(['auth'])

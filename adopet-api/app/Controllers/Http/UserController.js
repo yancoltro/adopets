@@ -22,8 +22,11 @@ class UserController {
     }   
 
     async logout({auth}){
-       const token = auth.getAuthHeader()
-       return token
+        const apiToken = auth.getAuthHeader()
+
+        await auth
+          .authenticator('api')
+          .revokeTokens([apiToken])
     }
 }
 
