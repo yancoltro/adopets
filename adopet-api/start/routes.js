@@ -16,6 +16,11 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
+Route.get('/', () => {
+  return { greeting: 'Welcome to Adopet API' }
+})
+
+
 Route.post('register', 'UserController.register').validator('UserValidator')
 Route.post('login', 'UserController.login')
 Route.post('logout', 'UserController.logout').middleware(['auth'])
@@ -26,9 +31,12 @@ Route.post('logout', 'UserController.logout').middleware(['auth'])
  * I could use the index method, capturing the parameters,
  * however, resolve to separate responsibilities
  */
-Route.get('products/filter=:field?&value=:value?',
+Route.get('products/filter=:field?&value=:value&page=:page?',
   'ProductController.filter').middleware(['auth'])
 
+/**
+ * Product api
+ */
 Route.resource('products', 'ProductController')
   .validator(new Map([
     [['products.store'], ['ProductValidator']],
