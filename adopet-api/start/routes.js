@@ -16,13 +16,18 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
-
 Route.post('register', 'UserController.register').validator('UserValidator')
 Route.post('login', 'UserController.login')
 Route.post('logout', 'UserController.logout').middleware(['auth'])
+ 
+/**
+ * I chose to make this url explicit for whoever or who opened or coded the system
+ * quickly realized that the API should offer this filtering function, as described below.
+ * I could use the index method, capturing the parameters,
+ * however, resolve to separate responsibilities
+ */
+Route.get('products/filter=:field?&value=:value?',
+  'ProductController.filter').middleware(['auth'])
 
 Route.resource('products', 'ProductController')
   .validator(new Map([

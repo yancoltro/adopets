@@ -19,6 +19,18 @@ class ProductController {
     return products
   }
 
+   /**
+   * Display a products with filters
+   * GET products/filter=:field&value=:value
+   */
+  async filter({params}) {
+    const products = await Product
+      .query()
+      .where(params.field,'like',`%${params.value}%`)
+      .fetch()
+    return products
+  }
+
   /**
    * Create/save a new product.
    * POST products
