@@ -3,6 +3,12 @@
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env')
 
+const winston = require('winston')
+const { combine, timestamp, prettyPrint, colorize, printf, splat, align } = winston.format
+const myFormat = printf(({ level, message, timestamp }) => {
+  return `${timestamp} ${level}: ${message}`;
+})
+
 module.exports = {
 
   /*
@@ -188,7 +194,7 @@ module.exports = {
     | Available drivers are: `file` and `console`.
     |
     */
-    transport: 'console',
+    transport: 'file',
 
     /*
     |--------------------------------------------------------------------------
@@ -201,7 +207,7 @@ module.exports = {
     */
     console: {
       driver: 'console',
-      name: 'adonis-app',
+      name: 'adopet-app',
       level: 'info'
     },
 
@@ -218,9 +224,16 @@ module.exports = {
     */
     file: {
       driver: 'file',
-      name: 'adonis-app',
-      filename: 'adonis.log',
-      level: 'info'
+      name: 'adopet-app',
+      filename: 'adopet.log',
+      level: 'info',
+      format: combine(
+        align(),
+        splat(),
+        timestamp(),
+        prettyPrint(),
+        myFormat
+    ),
     }
   },
 

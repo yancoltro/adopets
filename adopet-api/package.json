@@ -25,6 +25,7 @@
     "@adonisjs/ignitor": "^2.0.8",
     "@adonisjs/lucid": "^6.1.3",
     "@adonisjs/validator": "^5.0.6",
+    "http-logger": "^1.0.1",
     "mysql": "^2.18.1",
     "uuid": "^8.2.0"
   },

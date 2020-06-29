@@ -21,9 +21,11 @@ Route.get('/', () => {
 })
 
 
-Route.post('register', 'UserController.register').validator('UserValidator')
-Route.post('login', 'UserController.login')
-Route.post('logout', 'UserController.logout').middleware(['auth'])
+Route.post('register', 'UserController.register')
+  .middleware(['logger'])
+  .validator('UserValidator')
+Route.post('login', 'UserController.login').middleware(['logger'])
+Route.post('logout', 'UserController.logout').middleware(['auth', 'logger'])
  
 /**
  * I chose to make this url explicit for whoever or who opened or coded the system
@@ -32,7 +34,7 @@ Route.post('logout', 'UserController.logout').middleware(['auth'])
  * however, resolve to separate responsibilities
  */
 Route.get('products/filter=:field?&value=:value&page=:page?',
-  'ProductController.filter').middleware(['auth'])
+  'ProductController.filter').middleware(['auth', 'logger'])
 
 /**
  * Product api
@@ -43,4 +45,4 @@ Route.resource('products', 'ProductController')
     [['products.update'], ['ProductValidator']]
   ]))
   .apiOnly()
-  .middleware(['auth'])
+  .middleware(['auth', 'logger'])
