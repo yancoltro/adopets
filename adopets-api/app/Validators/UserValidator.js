@@ -4,8 +4,8 @@ class UserValidator {
 
   get rules() {
     return {
-      name: 'required|string|min:3|max:64',
-      email: 'required|email|unique:users,email|max:128',
+      name: 'required|min:3|max:64',
+      email: 'required|email|unique:users,email',
       password: 'required|alpha_numeric|min:8|max:64',
     }
   }
@@ -13,14 +13,12 @@ class UserValidator {
   get messages() {
     return {
       'name.required': 'You must provide the name of the user',
-      'name.string': 'Name must be string',
       'name.min': 'Very short name',
       'name.max': 'Very long name',
 
       'email.required': 'You must provide the email of the user',
       'email.email': 'Insert valid email',
       'email.unique': 'This registered email already exists',
-      'email.max': 'Very long email',
 
       'password.required':'You must provide the password of the user',
       'password.alpha_numeric':'The password need alpha numeric characters',

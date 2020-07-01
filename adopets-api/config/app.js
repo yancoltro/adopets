@@ -207,7 +207,7 @@ module.exports = {
     */
     console: {
       driver: 'console',
-      name: 'adopet-app',
+      name: 'adopets-api',
       level: 'info'
     },
 
@@ -224,8 +224,8 @@ module.exports = {
     */
     file: {
       driver: 'file',
-      name: 'adopet-app',
-      filename: 'adopet.log',
+      name: 'adopets-api',
+      filename: 'adopets.log',
       level: 'info',
       format: combine(
         align(),

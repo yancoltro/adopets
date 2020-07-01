@@ -1,5 +1,5 @@
 {
-  "name": "adopet-api",
+  "name": "adopets-api",
   "version": "1.0.0",
   "adonis-version": "4.1.0",
   "description": "Project to assess the knowledge of candidate yan coltro",
@@ -9,8 +9,8 @@
     "test": "node ace test"
   },
   "keywords": [
-    "adopet",
-    "adopet-ws"
+    "adopets",
+    "adopets-ws"
   ],
   "author": "Yan Coltro",
   "license": "UNLICENSED",
@@ -25,6 +25,7 @@
     "@adonisjs/ignitor": "^2.0.8",
     "@adonisjs/lucid": "^6.1.3",
     "@adonisjs/validator": "^5.0.6",
+    "@adonisjs/vow": "^1.0.17",
     "http-logger": "^1.0.1",
     "mysql": "^2.18.1",
     "uuid": "^8.2.0"
