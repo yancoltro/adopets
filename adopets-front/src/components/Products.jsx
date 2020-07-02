@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { Table } from 'antd';
-import DefaultLayout from './DefaultLayout'
+import {DefaultLayout} from './Defaults'
 
 const API = 'http://127.0.0.1:3333'
 

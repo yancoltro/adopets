@@ -1,4 +1,7 @@
 import React from 'react'
+import { Form, Input, Button, Checkbox } from 'antd';
+import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
+import { DefaultLoginRegister } from './Defaults'
 
 class Register extends React.Component {
 
@@ -8,10 +11,12 @@ class Register extends React.Component {
             name: '',
             email: '',
             pass: '',
-            rp_pass:'',
+            rp_pass: '',
 
-            isLoaded: false,
-            error: null
+            show_alert: false,
+            alert_message: '',
+            alert_description: '',
+            alert_type: 'error'
         }
         this.handleName = this.handleName.bind(this)
         this.handleEmail = this.handleEmail.bind(this)
@@ -21,18 +26,18 @@ class Register extends React.Component {
 
     }
 
-    handleName(event) {this.setState({ name: event.target.value })}
+    handleName(event) { this.setState({ name: event.target.value }) }
 
-    handleEmail(event) {this.setState({ email: event.target.value })}
+    handleEmail(event) { this.setState({ email: event.target.value }) }
 
-    handlePass(event) {this.setState({ pass: event.target.value })}
+    handlePass(event) { this.setState({ pass: event.target.value }) }
 
-    handleRpPass(event) {this.setState({ rp_pass: event.target.value })}
+    handleRpPass(event) { this.setState({ rp_pass: event.target.value }) }
 
     handleSubmit(event) {
         alert('Um nome foi enviado: ' + this.state.name);
         event.preventDefault();
-      }
+    }
 
     componentDidMount() { }
 
@@ -41,37 +46,73 @@ class Register extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <h1>Register</h1>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Name:
-                        <input type="text"
-                            value={this.state.name}
-                            onChange={this.handleName} />
-                    </label>
-                    <label>
-                        Email:
-                        <input type="email"
-                            value={this.state.email}
-                            onChange={this.handleEmail} />
-                    </label>
-                    <label>
-                        Password:
-                        <input type="password"
-                            value={this.state.pass}
-                            onChange={this.handlePass} />
-                    </label>
-                    <label>
-                        Repeat Password:
-                        <input type="password"
-                            value={this.state.rp_pass}
-                            onChange={this.handleRpPass} />
-                    </label>
-                    <input type="submit" value="Register" />
-                </form>
-
-            </React.Fragment>
-
+                <DefaultLoginRegister
+                    show_alert={this.state.show_alert}
+                    alert_message={this.state.alert_message}
+                    alert_description={this.state.alert_description}
+                    alert_type={this.state.alert_type}
+                    card_title="Register">
+                    <Form
+                        name="register"
+                        className="login-form"
+                        initialValues={{}}
+                        onFinish={this.handleSubmit}
+                        scrollToFirstError>
+                        <Form.Item
+                            name="name"
+                            rules={[{ required: true, message: 'Please input your Name!' }]}>
+                            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Name" />
+                        </Form.Item>
+                        <Form.Item
+                            name="email"
+                            rules={[
+                                { required: true, message: 'Please input your E-mail!' },
+                                { type: 'email', message: 'The input is not valid E-mail' }
+                            ]}>
+                            <Input
+                                prefix={<MailOutlined className="site-form-item-icon" />}
+                                type="email"
+                                placeholder="Email"
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="password"
+                            hasFeedback
+                            rules={[{ required: true, message: 'Please input your Password!' }]}>
+                            <Input
+                                prefix={<LockOutlined className="site-form-item-icon" />}
+                                type="password"
+                                placeholder="Password"
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="confirm"
+                            dependencies={['password']}
+                            hasFeedback
+                            rules={[
+                                { required: true, message: 'Please confirm your Password!' },
+                                ({ getFieldValue }) => ({
+                                    validator(rule, value) {
+                                        if (!value || getFieldValue('password') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject('The two passwords that you entered do not match!');
+                                    },
+                                }),
+                            ]}>
+                            <Input
+                                prefix={<LockOutlined className="site-form-item-icon" />}
+                                type="password"
+                                placeholder="Confirm Password"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit" className="login-form-button" block>
+                                Register</Button>
+                        </Form.Item>
+                    </Form>
+                </DefaultLoginRegister>
+            </React.Fragment >
         )
     }
 
