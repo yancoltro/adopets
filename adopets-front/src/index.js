@@ -7,9 +7,9 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import Login from './components/User/Login'
 import Register from './components/User/Register'
 import ProductsList from './components/Products/ProductsList'
+import ProductRegister from './components/Products/ProductsRegister'
 import {isLoggedIn, Logout} from './components/Defaults'
 
-import App from './App';
 import ComponenteDePagina404 from './App';
 
 
@@ -24,6 +24,13 @@ ReactDOM.render(
         <Route exact path="/products" render={() => (
           isLoggedIn() ? (
             <ProductsList />
+          ) : (
+            <Redirect to="/login" />
+            )
+        )} />
+         <Route path="/products/register" render={() => (
+          isLoggedIn() ? (
+            <ProductRegister />
           ) : (
             <Redirect to="/login" />
             )

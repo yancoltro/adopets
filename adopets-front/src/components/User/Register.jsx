@@ -45,7 +45,7 @@ class Register extends React.Component {
 
     render() {
         return (
-            <React.Fragment>
+            <div style={{height: '1280px'}}>
                 <DefaultLoginRegister
                     show_alert={this.state.show_alert}
                     alert_message={this.state.alert_message}
@@ -112,7 +112,7 @@ class Register extends React.Component {
                         </Form.Item>
                     </Form>
                 </DefaultLoginRegister>
-            </React.Fragment >
+            </div >
         )
     }
 

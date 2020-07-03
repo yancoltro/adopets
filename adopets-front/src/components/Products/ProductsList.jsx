@@ -1,9 +1,10 @@
 import React from 'react'
 import axios from 'axios'
-import { Table } from 'antd';
+import { Table, Space } from 'antd';
 import {DefaultLayout, getToken} from '../Defaults'
 import Cookies from 'universal-cookie'
 
+import '../Defaults.css'
 const API = 'http://127.0.0.1:3333'
 
 class ProductsList extends React.Component {
@@ -29,6 +30,31 @@ class ProductsList extends React.Component {
             dataIndex: 'stock',
             key: 'stock'
         },
+        {
+            title: 'Created',
+            dataIndex: 'created_at',
+            key: 'created_at'
+        },
+        {
+            title: 'Upadated',
+            dataIndex: 'updated_at',
+            key: 'updated_at'
+        },
+        {
+            title: 'Upadated',
+            dataIndex: 'updated_at',
+            key: 'updated_at'
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (text, record) => (
+              <Space size="middle">
+                <a>Update</a>
+                <a>Delete</a>
+              </Space>
+            ),
+          },
     ];
 
 

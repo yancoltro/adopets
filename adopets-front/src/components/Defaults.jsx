@@ -5,52 +5,69 @@ import { UserOutlined, NotificationOutlined, SmileOutlined, FrownOutlined } from
 import Cookies from 'universal-cookie'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import AdopetsLogo from '../adopets.svg'
+
 const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const { Header, Content, Sider, Footer } = Layout;
+
+
+let defaultSelected
+function menuSelected(event){
+  defaultSelected =  event.key
+}
 
 
 
 export function DefaultLayout(props) {
   return (
-    <Layout>
+    <Layout style={{ height: "100vh" }}>
       <Header className="header">
-        <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-          <Menu.Item key="1" style={{ float: "right" }}>
+
+        <Menu theme="dark" mode="horizontal">
+          <Menu.Item key="1">
+            <div className="logo" >
+              <img src={AdopetsLogo} />
+            </div>
+          </Menu.Item>
+          <Menu.Item key="" style={{ float: "right" }}>
             <Link to="/logout">Logout</Link>
           </Menu.Item>
         </Menu>
       </Header>
       <Layout>
-        <Sider width={200} className="site-layout-background">
+        <Sider style={{
+          overflow: 'auto',
+          height: '100vh',
+          position: 'fixed',
+          left: 0,
+        }}>
           <Menu
             mode="inline"
-            defaultSelectedKeys={['1']}
+            defaultSelectedKeys={[defaultSelected]}
             defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
           >
             <SubMenu key="sub1" icon={<UserOutlined />} title="Products">
-              <Menu.Item key="1">List Prodcuts</Menu.Item>
-              <Menu.Item key="2">Create Products</Menu.Item>
+              <Menu.Item key="1" onClick={menuSelected}><Link to="/products">List products</Link></Menu.Item>
+              <Menu.Item key="2" onClick={menuSelected}><Link to="/products/register">Register Products</Link></Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
-        <Layout style={{ padding: '0 24px 24px' }}>
+        <Layout className="site-layout" style={{ marginLeft: 200 }}>
+
           <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>/Products</Breadcrumb.Item>
+            <Breadcrumb.Item></Breadcrumb.Item>
           </Breadcrumb>
-          <Content
-            className="site-layout-background"
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-            }}
-          >
+          <Content style={{ margin: '24px 16px 0', padding: 24, overflow: 'initial', backgroundColor:'#fff' }}>
             {props.children}
           </Content>
         </Layout>
       </Layout>
+      <Footer style={{ textAlign: 'right' }}>
+        An offering of Adopets<br></br>
+        <b>Developed by Yan Coltro</b><br></br>
+        Powered by AntDesign
+      </Footer>
     </Layout>
   )
 }
@@ -84,7 +101,7 @@ export function DefaultLoginRegister(props) {
 }
 
 export function Logout(props) {
-  
+
   let error
   let token = getToken();
   if (token === null) {
@@ -126,10 +143,10 @@ export function getToken() {
   return typeof (cookie) === 'undefined' ? null : cookie.token
 }
 
-export function openNotification (p_message, p_description, p_icon){
+export function openNotification(p_message, p_description, p_icon) {
   notification.open({
     message: p_message,
     description: p_description,
-    icon: p_icon ||  <NotificationOutlined style={{ color: '#108ee9' }} />,
+    icon: p_icon || <NotificationOutlined style={{ color: '#108ee9' }} />,
   });
 };
