@@ -4,22 +4,29 @@ import { Form, Input, Button } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import Cookies from 'universal-cookie'
+import { DefaultLoginRegister, openNotification } from '../Defaults'
 
-import { DefaultLoginRegister } from './Defaults'
 
 class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: 'yan.coltro@hotmail.com',
-            password: 'qwertyui',
+            email: '',
+            password: '',
+
             show_alert: false,
             alert_message: '',
             alert_description: '',
             alert_type: 'error'
         }
+        this.handleEmail = this.handleEmail.bind(this)
+        this.handlePassword = this.handlePassword.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
+
+    handleEmail(event) { this.setState({ email: event.target.value }) }
+
+    handlePassword(event) { this.setState({ password: event.target.value }) }
 
     handleSubmit(event) {
         let user = {
@@ -29,22 +36,19 @@ class Login extends React.Component {
         console.log(user)
         axios.post('http://127.0.0.1:3333/login', user)
             .then(response => {
-                if (response.status !== 200) {
-                    // setar tempo de expiração
+                if (response.status === 200) {
                     const cookies = new Cookies();
-                    cookies.set('login', response, { path: '/' });
-                } else {
-                    this.setState({
-                        show_alert:true,
-                        alert_message: 'Error',
-                        alert_description: "Have any erro in you login"
-                    })
-                }
+                    cookies.set('login', response.data, { path: '/', maxAge: 86400 });
+                    openNotification("Logged in", "You are logged in system!", null)
+                    this.props.history.push('/products');
+                } 
             })
             .catch((error) => {
                 this.setState({
-                    error: error,
-                    isLoaded: true
+                    show_alert: true,
+                    alert_message: 'Error',
+                    alert_description: "Have any erro in you login.\n"+
+                    "Verify you email or password!  "+error
                 })
             })
     }
@@ -73,6 +77,8 @@ class Login extends React.Component {
                             <Input
                                 prefix={<MailOutlined className="site-form-item-icon" />}
                                 type="email"
+                                value={this.state.email}
+                                onChange={this.handleEmail}
                                 placeholder="Email"
                             />
                         </Form.Item>
@@ -82,6 +88,8 @@ class Login extends React.Component {
                             <Input
                                 prefix={<LockOutlined className="site-form-item-icon" />}
                                 type="password"
+                                value={this.state.password}
+                                onChange={this.handlePassword}
                                 placeholder="Password"
                             />
                         </Form.Item>
@@ -90,8 +98,8 @@ class Login extends React.Component {
                                 Log in
                             </Button>
                         </Form.Item>
-                        <div style={{textAlign: "right"}}>
-                        No have account? <Link to="/register" style={{textAlign:"right"}}>Register now!</Link>
+                        <div style={{ textAlign: "right" }}>
+                            No have account? <Link to="/register" style={{ textAlign: "right" }}>Register now!</Link>
                         </div>
                     </Form>
                 </DefaultLoginRegister>

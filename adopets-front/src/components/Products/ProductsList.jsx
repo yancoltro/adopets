@@ -1,11 +1,12 @@
 import React from 'react'
 import axios from 'axios'
 import { Table } from 'antd';
-import {DefaultLayout} from './Defaults'
+import {DefaultLayout, getToken} from '../Defaults'
+import Cookies from 'universal-cookie'
 
 const API = 'http://127.0.0.1:3333'
 
-class Products extends React.Component {
+class ProductsList extends React.Component {
 
     columns = [
         {
@@ -41,7 +42,10 @@ class Products extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://127.0.0.1:3333/products')
+        let token = getToken();
+        const header =  `Authorization: Bearer ${token}`;
+        
+        axios.get('http://127.0.0.1:3333/products', {  headers: {Authorization: 'Bearer ' + token} })
             .then(response => {
                 console.log(response.data)
                 this.setState({
@@ -89,4 +93,4 @@ class Products extends React.Component {
 
 }
 
-export default Products
+export default ProductsList
