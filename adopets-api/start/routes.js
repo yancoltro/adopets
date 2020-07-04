@@ -45,4 +45,4 @@ Route.resource('products', 'ProductController')
     [['products.update'], ['ProductValidator']]
   ]))
   .apiOnly()
-  .middleware([ 'logger'])
+  .middleware(['auth', 'logger'])

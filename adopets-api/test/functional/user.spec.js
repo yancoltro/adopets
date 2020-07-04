@@ -2,25 +2,22 @@
 
 const Suite = use('Test/Suite')('User')
 const User = use('App/Models/User')
-const {test,trait,before} = Suite
+const { test, trait, before } = Suite
 
+trait('Auth/Client')
 trait('Test/ApiClient')
 /**
  * Remove all users into database
  */
-before(async () => {
-  await User.query().delete()
-})
-
 
 test('[[POST]{register}: Create new invalid user (unnamed)', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: '',
-    email: 'cabral@adopets.org',
-    password: 'adopets1'
-  }).end()
+    .post('register')
+    .send({
+      name: '',
+      email: 'cabral@adopets.org',
+      password: 'adopets1'
+    }).end()
 
   response.assertStatus(422)
   response.assertJSON({
@@ -30,12 +27,12 @@ test('[[POST]{register}: Create new invalid user (unnamed)', async ({ client }) 
 
 test('[[POST]{register}: Create new invalid user (short name)', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: 'a',
-    email: 'cabral@adopets.org',
-    password: 'adopets1'
-  }).end()
+    .post('register')
+    .send({
+      name: 'a',
+      email: 'cabral@adopets.org',
+      password: 'adopets1'
+    }).end()
 
   response.assertStatus(422)
   response.assertJSON({
@@ -45,12 +42,12 @@ test('[[POST]{register}: Create new invalid user (short name)', async ({ client 
 
 test('[[POST]{register}: Create new invalid user (long name)', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ullamcorper eu enim at cursus. Ut volutpat vel massa at dictum',
-    email: 'cabral@adopets.org',
-    password: 'adopets1'
-  }).end()
+    .post('register')
+    .send({
+      name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ullamcorper eu enim at cursus. Ut volutpat vel massa at dictum',
+      email: 'cabral@adopets.org',
+      password: 'adopets1'
+    }).end()
 
   response.assertStatus(422)
   response.assertJSON({
@@ -60,12 +57,12 @@ test('[[POST]{register}: Create new invalid user (long name)', async ({ client }
 
 test('[[POST]{register}: Create new invalid user (no email)', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: '',
-    password: 'adopets1'
-  }).end()
+    .post('register')
+    .send({
+      name: 'Pedro Alvares Cabral',
+      email: '',
+      password: 'adopets1'
+    }).end()
 
   response.assertStatus(422)
   response.assertJSON({
@@ -75,12 +72,12 @@ test('[[POST]{register}: Create new invalid user (no email)', async ({ client })
 
 test('[[POST]{register}: Create new invalid user (invalid email)', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: 'noemail@',
-    password: 'adopets1'
-  }).end()
+    .post('register')
+    .send({
+      name: 'Pedro Alvares Cabral',
+      email: 'noemail@',
+      password: 'adopets1'
+    }).end()
 
   response.assertStatus(422)
   response.assertJSON({
@@ -90,12 +87,12 @@ test('[[POST]{register}: Create new invalid user (invalid email)', async ({ clie
 
 test('[[POST]{register}: Create new invalid user (long invalid email)', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: 'uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67@adopets.org',
-    password: 'adopets1'
-  }).end()
+    .post('register')
+    .send({
+      name: 'Pedro Alvares Cabral',
+      email: 'uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67@adopets.org',
+      password: 'adopets1'
+    }).end()
 
   response.assertStatus(422)
   response.assertJSON({
@@ -105,12 +102,12 @@ test('[[POST]{register}: Create new invalid user (long invalid email)', async ({
 
 test('[[POST]{register}: Create new invalid user (no password)', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: 'cabral@adopets.org',
-    password: ''
-  }).end()
+    .post('register')
+    .send({
+      name: 'Pedro Alvares Cabral',
+      email: 'cabral@adopets.org',
+      password: ''
+    }).end()
 
   response.assertStatus(422)
   response.assertJSON({
@@ -120,12 +117,12 @@ test('[[POST]{register}: Create new invalid user (no password)', async ({ client
 
 test('[[POST]{register}: Create new invalid user (no alpha numeric password)', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: 'cabral@adopets.org',
-    password: '****////-++..+-*/'
-  }).end()
+    .post('register')
+    .send({
+      name: 'Pedro Alvares Cabral',
+      email: 'cabral@adopets.org',
+      password: '****////-++..+-*/'
+    }).end()
 
   response.assertStatus(422)
   response.assertJSON({
@@ -135,12 +132,12 @@ test('[[POST]{register}: Create new invalid user (no alpha numeric password)', a
 
 test('[[POST]{register}: Create new invalid user (short password)', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: 'cabral@adopets.org',
-    password: 'qazxs6'
-  }).end()
+    .post('register')
+    .send({
+      name: 'Pedro Alvares Cabral',
+      email: 'cabral@adopets.org',
+      password: 'qazxs6'
+    }).end()
 
   response.assertStatus(422)
   response.assertJSON({
@@ -150,12 +147,12 @@ test('[[POST]{register}: Create new invalid user (short password)', async ({ cli
 
 test('[[POST]{register}: Create new invalid user (long password)', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: 'cabral@adopets.org',
-    password: 'uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67'
-  }).end()
+    .post('register')
+    .send({
+      name: 'Pedro Alvares Cabral',
+      email: 'cabral@adopets.org',
+      password: 'uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67uncullamcorpereu67'
+    }).end()
 
   response.assertStatus(422)
   response.assertJSON({
@@ -165,12 +162,12 @@ test('[[POST]{register}: Create new invalid user (long password)', async ({ clie
 
 test('[[POST]{register}: Create new valid user', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: 'cabral@adopets.org',
-    password: 'adopets1'
-  }).end()
+    .post('register')
+    .send({
+      name: 'Pedro Alvares Cabral',
+      email: 'cabral@adopets.org',
+      password: 'adopets1'
+    }).end()
 
   response.assertStatus(200)
   response.assertJSONSubset({
@@ -181,12 +178,12 @@ test('[[POST]{register}: Create new valid user', async ({ client }) => {
 
 test('[[POST]{register}: Create new invalid user (duplicated email)', async ({ client }) => {
   const response = await client
-  .post('register')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: 'cabral@adopets.org',
-    password: 'adopets1'
-  }).end()
+    .post('register')
+    .send({
+      name: 'Pedro Alvares Cabral',
+      email: 'cabral@adopets.org',
+      password: 'adopets1'
+    }).end()
 
   response.assertStatus(422)
   response.assertJSON({
@@ -196,39 +193,37 @@ test('[[POST]{register}: Create new invalid user (duplicated email)', async ({ c
 
 test('[[POST]{login}: Login with the new user', async ({ client }) => {
   const response = await client
-  .post('login')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: 'cabral@adopets.org',
-    password: 'adopets1'
-  }).end()
+    .post('login')
+    .send({
+      name: 'Pedro Alvares Cabral',
+      email: 'cabral@adopets.org',
+      password: 'adopets1'
+    }).end()
 
   response.assertStatus(200)
   response.assertJSONSubset({
-      type: "bearer"
+    type: "bearer"
   })
 })
 
 test('[[POST]{login}: Login with invalid user', async ({ client }) => {
   const response = await client
-  .post('login')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: 'cabral@adopets.org',
-    password: 'password_not_is_this'
-  }).end()
+    .post('login')
+    .send({
+      name: 'Pedro Alvares Cabral',
+      email: 'cabral@adopets.org',
+      password: 'password_not_is_this'
+    }).end()
 
   response.assertStatus(401)
 })
 
-test('[[POST]{logout}: Login with invalid user', async ({ client }) => {
+test('[[POST]{logout}: Logout', async ({ client }) => {
+  const user = await User.findBy('email', 'cabral@adopets.org')
   const response = await client
-  .post('logout')
-  .send({
-    name: 'Pedro Alvares Cabral',
-    email: 'cabral@adopets.org',
-    password: 'password_not_is_this'
-  }).end()
+    .post('logout')
+    .loginVia(user, 'api')
+    .end()
 
-  response.assertStatus(401)
+  response.assertStatus(200)
 })
