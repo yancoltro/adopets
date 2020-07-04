@@ -4,7 +4,7 @@ import { Form, Input, Button } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import Cookies from 'universal-cookie'
-import { DefaultLoginRegister, openNotification } from '../Defaults'
+import { DefaultLoginRegister, openNotification, api } from '../Defaults'
 
 
 class Login extends React.Component {
@@ -12,12 +12,7 @@ class Login extends React.Component {
         super(props);
         this.state = {
             email: '',
-            password: '',
-
-            show_alert: false,
-            alert_message: '',
-            alert_description: '',
-            alert_type: 'error'
+            password: ''
         }
         this.handleEmail = this.handleEmail.bind(this)
         this.handlePassword = this.handlePassword.bind(this)
@@ -33,8 +28,7 @@ class Login extends React.Component {
             email: this.state.email,
             password: this.state.password
         }
-        console.log(user)
-        axios.post('http://127.0.0.1:3333/login', user)
+        axios.post(api()+'/login', user)
             .then(response => {
                 if (response.status === 200) {
                     const cookies = new Cookies();
@@ -44,12 +38,7 @@ class Login extends React.Component {
                 } 
             })
             .catch((error) => {
-                this.setState({
-                    show_alert: true,
-                    alert_message: 'Error',
-                    alert_description: "Have any erro in you login.\n"+
-                    "Verify you email or password!  "+error
-                })
+                openNotification(`Huston, we have a problem! ${error.response.status}`, `Verify your email and password`, 'fail')
             })
     }
 
@@ -58,10 +47,6 @@ class Login extends React.Component {
         return (
             <React.Fragment>
                 <DefaultLoginRegister
-                    show_alert={this.state.show_alert}
-                    alert_message={this.state.alert_message}
-                    alert_description={this.state.alert_description}
-                    alert_type={this.state.alert_type}
                     card_title="Login">
                     <Form
                         name="normal_login"

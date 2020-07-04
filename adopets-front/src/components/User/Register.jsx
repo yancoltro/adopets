@@ -1,7 +1,8 @@
 import React from 'react'
-import { Form, Input, Button, Checkbox } from 'antd';
+import axios from 'axios'
+import { Form, Input, Button } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
-import { DefaultLoginRegister } from '../Defaults'
+import { DefaultLoginRegister, api, openNotification } from '../Defaults'
 
 class Register extends React.Component {
 
@@ -10,18 +11,11 @@ class Register extends React.Component {
         this.state = {
             name: '',
             email: '',
-            pass: '',
-            rp_pass: '',
-
-            show_alert: false,
-            alert_message: '',
-            alert_description: '',
-            alert_type: 'error'
+            password: ''
         }
         this.handleName = this.handleName.bind(this)
         this.handleEmail = this.handleEmail.bind(this)
-        this.handlePass = this.handlePass.bind(this)
-        this.handleRpPass = this.handleRpPass.bind(this)
+        this.handlePassword = this.handlePassword.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
 
     }
@@ -30,27 +24,35 @@ class Register extends React.Component {
 
     handleEmail(event) { this.setState({ email: event.target.value }) }
 
-    handlePass(event) { this.setState({ pass: event.target.value }) }
-
-    handleRpPass(event) { this.setState({ rp_pass: event.target.value }) }
+    handlePassword(event) { this.setState({ password: event.target.value }) }
 
     handleSubmit(event) {
-        alert('Um nome foi enviado: ' + this.state.name);
-        event.preventDefault();
+        let user = {
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password
+        }
+        console.log(user)
+        axios.post(api()+'/register', user)
+            .then(response => {
+                if (response.status === 200) {
+                    openNotification("Logged in", "You are registered in system!", null)
+                    this.props.history.push('/products');
+                }else {
+                    openNotification("Ops", `Unrecognized error: ${response.data}`, 'info')
+                }
+            })
+            .catch((error) => {
+                var response = error.response
+                var for_user = response === 'undefined' ? error.error : response.data.error
+                openNotification("Huston, we have a problem!", `${for_user}`, 'fail')
+            })
     }
-
-    componentDidMount() { }
-
-    componentWillMount() { }
 
     render() {
         return (
             <div style={{height: '1280px'}}>
                 <DefaultLoginRegister
-                    show_alert={this.state.show_alert}
-                    alert_message={this.state.alert_message}
-                    alert_description={this.state.alert_description}
-                    alert_type={this.state.alert_type}
                     card_title="Register">
                     <Form
                         name="register"
@@ -61,7 +63,11 @@ class Register extends React.Component {
                         <Form.Item
                             name="name"
                             rules={[{ required: true, message: 'Please input your Name!' }]}>
-                            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Name" />
+                            <Input 
+                                value={this.state.name}
+                                onChange={this.handleName}
+                                prefix={<UserOutlined className="site-form-item-icon" />} 
+                                placeholder="Name" />
                         </Form.Item>
                         <Form.Item
                             name="email"
@@ -70,6 +76,8 @@ class Register extends React.Component {
                                 { type: 'email', message: 'The input is not valid E-mail' }
                             ]}>
                             <Input
+                                value={this.state.email}
+                                onChange={this.handleEmail}
                                 prefix={<MailOutlined className="site-form-item-icon" />}
                                 type="email"
                                 placeholder="Email"
@@ -80,6 +88,8 @@ class Register extends React.Component {
                             hasFeedback
                             rules={[{ required: true, message: 'Please input your Password!' }]}>
                             <Input
+                                value={this.state.password}
+                                onChange={this.handlePassword}
                                 prefix={<LockOutlined className="site-form-item-icon" />}
                                 type="password"
                                 placeholder="Password"

@@ -1,13 +1,13 @@
 import React from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom';
-import { Table, Space } from 'antd';
+import { Table, Space, PageHeader, Input, Row, Col, Select } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import {DefaultLayout, getToken} from '../Defaults'
-import Cookies from 'universal-cookie'
-
+import { DefaultLayout, getToken, api, openNotification } from '../Defaults'
 import '../Defaults.css'
-const API = 'http://127.0.0.1:3333'
+
+const { Option } = Select;
+
 
 class ProductsList extends React.Component {
 
@@ -56,12 +56,12 @@ class ProductsList extends React.Component {
             title: 'Actions',
             key: 'actions',
             render: (text, record) => (
-              <Space size="middle">
-                <Link to={"/products/update/"+record.uuid}><EditOutlined/>&nbsp;Update</Link>
-                <Link to={"/products/delete/"+record.uuid}><DeleteOutlined/>&nbsp;Delete</Link>
-              </Space>
+                <Space size="middle">
+                    <Link to={"/products/update/" + record.uuid}><EditOutlined />&nbsp;Update</Link>
+                    <Link to={"/products/delete/" + record.uuid} style={{ color: '#f00' }}><DeleteOutlined />&nbsp;Delete</Link>
+                </Space>
             ),
-          },
+        },
     ];
 
 
@@ -69,28 +69,53 @@ class ProductsList extends React.Component {
         super(props);
         this.state = {
             products: [],
-            isLoaded: false,
-            error: null
+            filter_type: 'name',
+            filter_value: ''
         }
+
+        this.handleFilterType = this.handleFilterType.bind(this)
+        this.handleFilterValue = this.handleFilterValue.bind(this)
+    }
+
+    handleFilterType(event) {
+        this.setState({ filter_type: event }, () => {
+            this.handleFilter()
+        })
+    }
+
+    handleFilterValue(event) {
+        this.setState({ filter_value: event.target.value }, () => {
+            this.handleFilter()
+        })
+
+    }
+
+    handleFilter() {
+        let token = getToken();
+        let url = api()+`/products/filter=${this.state.filter_type}&value=${this.state.filter_value}&page=`
+        axios.get(url, { headers: { Authorization: 'Bearer ' + token } })
+            .then(response => {
+                this.setState({
+                    products: response.data,
+                })
+            })
+            .catch((error) => {
+                openNotification(`Huston, we have a problem! ${error.response.status}`,
+                 'There was an error applying the filterss', 'fail')
+            })
     }
 
     componentDidMount() {
         let token = getToken();
-        const header =  `Authorization: Bearer ${token}`;
-        
-        axios.get('http://127.0.0.1:3333/products', {  headers: {Authorization: 'Bearer ' + token} })
+        axios.get(api() + '/products', { headers: { Authorization: 'Bearer ' + token } })
             .then(response => {
-                console.log(response.data)
                 this.setState({
-                    products: response.data,
-                    isLoaded: true
+                    products: response.data
                 })
             })
             .catch((error) => {
-                this.setState({
-                    error: error,
-                    isLoaded: true
-                })
+                openNotification(`Huston, we have a problem! ${error.response.status}`,
+                 'There was an error loading the products', 'fail')
             })
 
     }
@@ -99,26 +124,37 @@ class ProductsList extends React.Component {
 
     }
 
-    ProductResult() {
-        
-    }
-
     render() {
-        const { error, isLoaded, products } = this.state;
-        let forRender;
-        if (error) {
-            forRender = <h1 key="product_3">Error: {error.message}</h1>;
-        } else if (!isLoaded) {
-            forRender = <h1 key="product_4">Loading...</h1>;
-        } else {
-           forRender = <Table columns={this.columns} dataSource={this.state.products} key="product_2" />
-        }
 
         return (
             <React.Fragment>
                 <DefaultLayout>
-                    <h1 key="product_1">Products</h1>
-                    {forRender}
+                    <Row>
+                        <Col span={12}><PageHeader
+                            className="site-page-header"
+                            title="Products" />
+                        </Col>
+                        <Col span={12}>
+                            <div style={{ float: "right", display: 'inline' }}>
+
+                                <Row>
+                                    <Col span={12}>
+                                        Filter by:&nbsp;&nbsp;&nbsp;
+                                        <Select defaultValue="Name" style={{ width: 120 }} onChange={this.handleFilterType}>
+                                            <Option value="name">Name</Option>
+                                            <Option value="description">Description</Option>
+                                            <Option value="category">Category</Option>
+                                        </Select>
+                                    </Col>
+                                    <Col span={12}>
+                                        <Input placeholder="Filter Value" value={this.state.filter_value} onChange={this.handleFilterValue} />
+                                    </Col>
+                                </Row>
+                            </div></Col>
+                    </Row>
+
+
+                    <Table columns={this.columns} dataSource={this.state.products} key="product_2" />
                 </DefaultLayout>
             </React.Fragment>
         )

@@ -1,23 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { DefaultLoginRegister } from './components/Defaults'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
+    <React.Fragment>
+      <DefaultLoginRegister
+        card_title="404">
         <p>
           Page not found
         </p>
-        <a
-          className="App-link"
-          href="/products"
-          rel="noopener noreferrer"
-        >
-         View Products
+        <a href="/products">
+          View Products
         </a>
-      </header>
-    </div>
+      </DefaultLoginRegister>
+    </React.Fragment>
   );
 }
 
