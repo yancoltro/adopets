@@ -1,6 +1,8 @@
 import React from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom';
 import { Table, Space } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import {DefaultLayout, getToken} from '../Defaults'
 import Cookies from 'universal-cookie'
 
@@ -10,6 +12,11 @@ const API = 'http://127.0.0.1:3333'
 class ProductsList extends React.Component {
 
     columns = [
+        {
+            title: 'UUID',
+            dataIndex: 'uuid',
+            key: 'uuid'
+        },
         {
             title: 'Name',
             dataIndex: 'name',
@@ -46,17 +53,12 @@ class ProductsList extends React.Component {
             key: 'updated_at'
         },
         {
-            title: 'Upadated',
-            dataIndex: 'updated_at',
-            key: 'updated_at'
-        },
-        {
-            title: 'Action',
-            key: 'action',
+            title: 'Actions',
+            key: 'actions',
             render: (text, record) => (
               <Space size="middle">
-                <a>Update</a>
-                <a>Delete</a>
+                <Link to={"/products/update/"+record.uuid}><EditOutlined/>&nbsp;Update</Link>
+                <Link to={"/products/delete/"+record.uuid}><DeleteOutlined/>&nbsp;Delete</Link>
               </Space>
             ),
           },

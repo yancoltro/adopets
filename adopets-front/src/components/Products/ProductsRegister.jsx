@@ -1,10 +1,10 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import '../Defaults.css'
 import { withRouter} from 'react-router-dom';
 import { DefaultLayout, getToken } from '../Defaults'
 import { Form, Input, InputNumber, Button, Select } from 'antd';
 import axios from 'axios';
-import {openNotification} from '../Defaults'
+import {openNotification, api} from '../Defaults'
 
 const { Option } = Select;
 
@@ -13,6 +13,9 @@ class ProductRegister extends React.Component {
         
         super(props);
         this.state = {
+            method: 'post',
+            url: api()+'/products',
+            uuid: '',
             name: '',
             description: '',
             category: '',
@@ -27,24 +30,39 @@ class ProductRegister extends React.Component {
         this.handleSelectCategory = this.handleSelectCategory.bind(this)
 
 
-        this.handleSubmit = this.handleSubmit.bind(this)
-        
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    formRef = React.createRef();
 
     componentDidMount(){
         let method = this.props.match.params.method
         let uuid = this.props.match.params.uuid
         if(method === 'update'){
+            this.setState({method:'put',url: api()+`/products/${uuid}`})
             this.getProduct(uuid)
         }else if(method === 'delete'){
+            this.setState({method:'delete', url: api()+`/products/${uuid}`})
             this.deleteProduct(uuid)
-        }else{
-            this.props.history.push('/404')
-        }
+         }
     }
 
     getProduct(uuid){
-
+        let token = getToken();
+        const header =  `Authorization: Bearer ${token}`;
+        
+        axios.get(api()+`/products/${uuid}`, {  headers: {Authorization: 'Bearer ' + token} })
+            .then(response => {
+                if(response.status === 200){
+                    this.setState(response.data)
+                    this.formRef.current.setFieldsValue(this.state);
+                }
+            })
+            .catch((error) => {
+                var response = error.response
+                var for_user  = response === 'undefined' ? error.error : response.data.error
+                openNotification("Huston, we have a problem!", `${for_user}`, 'fail')
+            })
     }
 
     deleteProduct(uuid){}
@@ -54,42 +72,36 @@ class ProductRegister extends React.Component {
 
     handleDescription(event){ this.setState({description: event.target.value})}
 
-    handleSelectCategory(event){ this.setState({category: event})}
+    handleSelectCategory(value){ this.setState({category: value})}
 
     handleCategory(event){ this.setState({category: event.target.value})}
 
-    handlePrice(event){ this.setState({price: event.target.value})}
+    handlePrice(value){ this.setState({price: value})}
 
-    handleStock(event){ this.setState({stock: event.target.value})}
+    handleStock(value){ this.setState({stock: value})}
 
     handleSubmit(event) {
-        let product = {
-            name : this.state.name,
-            description : this.state.description,
-            category : this.state.category,
-            price : this.state.price,
-            stock : this.state.stock
-        }
         let token = getToken();
         const header =  `Authorization: Bearer ${token}`;
-        
-        axios.post('http://127.0.0.1:3333/products', product, {  headers: {Authorization: 'Bearer ' + token} })
-            .then(response => {
-                if(response.status === 200){
-                    console.log(response)
-                    openNotification("Success", "New product added!", 'success')
-                    console.log(this.props)
-                    this.props.history.push('/products');
-                }else{
-                    openNotification("Ops", `Unrecognized error: ${response.data}`, 'info')
-                }
-            })
-            .catch((error) => {
-                console.log(error)               
-                //var response = error.response
-                //var for_user  = response === 'undefined' ? error.error : response.data.error
-                //openNotification("Huston, we have a problem!", `${for_user}`, 'fail')
-            })
+        axios({
+            method : this.state.method,
+            url: this.state.url,
+            data: this.state,
+            headers: {"Authorization": `Bearer ${token}`}
+          })
+          .then(response => {
+            if(response.status === 200){
+                openNotification("Success", "New product added!", 'success')
+                this.props.history.push('/products');
+            }else{
+                openNotification("Ops", `Unrecognized error: ${response.data}`, 'info')
+            }
+        })
+        .catch((error) => {
+            var response = error.response
+            var for_user  = response === 'undefined' ? error.error : response.data.error
+            openNotification("Huston, we have a problem!", `${for_user}`, 'fail')
+        })  
     }
 
     validateMessages = {
@@ -102,18 +114,15 @@ class ProductRegister extends React.Component {
             range: '${label} must be greater than ${min}',
         },
     };
-    onFinish(values) {
-        console.log(values)
-     }
-
-
+   
     render() {
+        
         return (
             <React.Fragment>
                 <DefaultLayout>
-                    <Form  name="nest-messages" onFinish={this.handleSubmit} validateMessages={this.validateMessages}>
+                    <Form  name="nest-messages" onFinish={this.handleSubmit} validateMessages={this.validateMessages} initialValues={this.state} ref={this.formRef}>
                         <Form.Item name={'name'} label="Product Name" rules={[{ required: true }]}>
-                            <Input  value={this.state.name} onChange={this.handleName}/>
+                            <Input value={this.state.name} onChange={this.handleName}/>
                         </Form.Item>
                         <Form.Item name={'description'} label="Product Description" rules={[{ required: true }]}>
                             <Input.TextArea value={this.state.description} onChange={this.handleDescription} />
@@ -158,6 +167,7 @@ class ProductRegister extends React.Component {
                 </DefaultLayout>
             </React.Fragment>
         )
+        
     }
 }
 

@@ -16,8 +16,6 @@ function menuSelected(event) {
   defaultSelected = event.key
 }
 
-
-
 export function DefaultLayout(props) {
   return (
     <Layout style={{ height: "100vh" }}>
@@ -132,6 +130,10 @@ export function Logout(props) {
       props.history.push("/products")
     })
   return null
+}
+
+export function api(){
+  return 'http://127.0.0.1:3333'
 }
 
 export function isLoggedIn() {
