@@ -28,7 +28,14 @@ ReactDOM.render(
             <Redirect to="/login" />
             )
         )} />
-         <Route path="/products/register" render={() => (
+         <Route exact path="/products/add" render={() => (
+          isLoggedIn() ? (
+            <ProductRegister />
+          ) : (
+            <Redirect to="/login" />
+            )
+        )} />
+        <Route path="/products/:method/:uuid" render={() => (
           isLoggedIn() ? (
             <ProductRegister />
           ) : (

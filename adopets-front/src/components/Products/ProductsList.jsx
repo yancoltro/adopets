@@ -21,6 +21,11 @@ class ProductsList extends React.Component {
             key: 'description'
         },
         {
+            title: 'Category',
+            dataIndex: 'category',
+            key: 'category'
+        },
+        {
             title: 'Price',
             dataIndex: 'price',
             key: 'price'

@@ -12,8 +12,8 @@ const { Header, Content, Sider, Footer } = Layout;
 
 
 let defaultSelected
-function menuSelected(event){
-  defaultSelected =  event.key
+function menuSelected(event) {
+  defaultSelected = event.key
 }
 
 
@@ -49,7 +49,7 @@ export function DefaultLayout(props) {
           >
             <SubMenu key="sub1" icon={<UserOutlined />} title="Products">
               <Menu.Item key="1" onClick={menuSelected}><Link to="/products">List products</Link></Menu.Item>
-              <Menu.Item key="2" onClick={menuSelected}><Link to="/products/register">Register Products</Link></Menu.Item>
+              <Menu.Item key="2" onClick={menuSelected}><Link to="/products/add">Add Products</Link></Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
@@ -58,7 +58,7 @@ export function DefaultLayout(props) {
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item></Breadcrumb.Item>
           </Breadcrumb>
-          <Content style={{ margin: '24px 16px 0', padding: 24, overflow: 'initial', backgroundColor:'#fff' }}>
+          <Content style={{ margin: '24px 16px 0', padding: 24, overflow: 'initial', backgroundColor: '#fff' }}>
             {props.children}
           </Content>
         </Layout>
@@ -144,9 +144,24 @@ export function getToken() {
 }
 
 export function openNotification(p_message, p_description, p_icon) {
+  let r_icon;
+  switch (p_icon) {
+    case 'success':
+      r_icon = <SmileOutlined style={{ color: '#008000' }} />;
+      break
+    case 'fail':
+      r_icon = <FrownOutlined style={{ color: '#FF0000' }} />;
+      break
+    default:
+      r_icon = <NotificationOutlined style={{ color: '#108ee9' }} />
+      break
+
+  }
+
   notification.open({
     message: p_message,
     description: p_description,
-    icon: p_icon || <NotificationOutlined style={{ color: '#108ee9' }} />,
+    icon: r_icon,
+    duration: 10
   });
 };
