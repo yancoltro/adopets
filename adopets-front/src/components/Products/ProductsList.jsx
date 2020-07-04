@@ -84,25 +84,31 @@ class ProductsList extends React.Component {
     }
 
     handleFilterValue(event) {
+
         this.setState({ filter_value: event.target.value }, () => {
             this.handleFilter()
         })
 
+
     }
 
     handleFilter() {
-        let token = getToken();
-        let url = api()+`/products/filter=${this.state.filter_type}&value=${this.state.filter_value}&page=`
-        axios.get(url, { headers: { Authorization: 'Bearer ' + token } })
-            .then(response => {
-                this.setState({
-                    products: response.data,
+        if (this.state.filter_value !== '') {
+            let token = getToken();
+            let url = api() + `/products/filter=${this.state.filter_type}&value=${this.state.filter_value}&page=`
+            axios.get(url, { headers: { Authorization: 'Bearer ' + token } })
+                .then(response => {
+                    this.setState({
+                        products: response.data,
+                    })
                 })
-            })
-            .catch((error) => {
-                openNotification(`Huston, we have a problem! ${error.response.status}`,
-                 'There was an error applying the filterss', 'fail')
-            })
+                .catch((error) => {
+                    openNotification(`Huston, we have a problem! ${error.response.status}`,
+                        'There was an error applying the filters', 'fail')
+                })
+        }else{
+            this.componentDidMount()
+        }
     }
 
     componentDidMount() {
@@ -115,7 +121,7 @@ class ProductsList extends React.Component {
             })
             .catch((error) => {
                 openNotification(`Huston, we have a problem! ${error.response.status}`,
-                 'There was an error loading the products', 'fail')
+                    'There was an error loading the products', 'fail')
             })
 
     }
