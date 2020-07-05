@@ -28,6 +28,7 @@
     "@adonisjs/vow": "^1.0.17",
     "http-logger": "^1.0.1",
     "mysql": "^2.18.1",
+    "sqlite3": "^5.0.0",
     "uuid": "^8.2.0"
   },
   "devDependencies": {},
