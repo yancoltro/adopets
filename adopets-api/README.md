@@ -47,17 +47,22 @@ $ mv .env.example .env
 $ adonis test
 ```
 
-4. Gere uma chave única para seu aplicativo 
+4.Se os testes passaram, você está pronto para prosseguir. Crie agora a base de dados 
+```
+$ adonis migration:run
+```
+
+5. Gere uma chave única para seu aplicativo 
 ```
 $ adonis key:generate
 ```
 
-5. Se os testes passaram, você está pronto para executar o aplicativo 
+6. Pronto, você está preparado para executar o aplicativo 
 ```
 $adonis serve
 ```
 
-6. Teste sua instancia local [aqui](http://localhost:3333)
+7. Teste sua instancia local [aqui](http://localhost:3333)
 
 Consulte todas as possibilidades didigtando _adonis_ em seu terminal
 ```
