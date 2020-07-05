@@ -66,3 +66,4 @@ $ adonis
 
 As rotas disponives são estas, podendo ser testadas em seu cliente de preferência
 
+![Captura de tela de 2020-07-04 23-48-03](https://user-images.githubusercontent.com/31298655/86524432-11e3ed80-be51-11ea-8b00-e3137a5a4c93.png)
