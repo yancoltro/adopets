@@ -11,7 +11,7 @@ Requisitos
 NodeJS: v12.18.0
 SQlite 2.8.17
 ```
-##Os seguintes comandos deste arquivo foram testandos e executados em servidor Linux
+## Os seguintes comandos deste arquivo foram testandos e executados em servidor Linux
 ```
 $ sudo apt install nodejs
 ```
