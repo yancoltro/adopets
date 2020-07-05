@@ -1,4 +1,4 @@
-#Adpoet Api
+# Adpoets Api
 
 Este projeto encontra-se em  deploy no Heroku [aqui](https://yan-test-adopets-api.herokuapp.com/)
 
