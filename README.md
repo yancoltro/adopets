@@ -6,3 +6,4 @@ Navegue até os README's das pastas para obter instruçôes específicas de impl
  
 2. Deploy do FrontEnd    [aqui](https://yan-test-adopets-front.herokuapp.com/)
 
+**_Para instâncias locais, recomendamos realizar a implantação da api primeiramente_**
